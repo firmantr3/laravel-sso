@@ -27,8 +27,8 @@ class CreateLaravelSSOTable extends Migration
         
         Schema::create('authenticatables', function (Blueprint $table) {
             $table->increments('id');
-            $table->uuid('credential_id')->index();
-            $table->uuid('authenticatable_id')->nullable()->index();
+            $table->unsignedInteger('credential_id')->index();
+            $table->unsignedInteger('authenticatable_id')->nullable()->index();
             $table->string('authenticatable_type')->nullable()->index();
             $table->rememberToken();
             $table->timestamps();
