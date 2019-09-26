@@ -20,7 +20,7 @@ class SSOServiceProvider extends ServiceProvider
     public function boot(Filesystem $filesystem)
     {
         $this->publishes([
-            __DIR__.'/../database/migrations/create_laravel_sso_table.php.stub' => $this->getMigrationFileName($filesystem),
+            __DIR__.'/../../../database/migrations/create_laravel_sso_table.php.stub' => $this->getMigrationFileName($filesystem),
         ], 'migrations');
 
         Auth::provider('sso', function ($app, array $config) {
