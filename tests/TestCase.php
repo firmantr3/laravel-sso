@@ -2,7 +2,10 @@
 
 namespace Firmantr3\LaravelSSO\Test;
 
+use Firmantr3\LaravelSSO\Test\Admin;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Schema\Blueprint;
+use Firmantr3\LaravelSSO\Models\Credential;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Firmantr3\LaravelSSO\Providers\SSOServiceProvider;
 
@@ -71,5 +74,23 @@ abstract class TestCase extends Orchestra
         (new \CreateLaravelSSOTable())->up();
 
         Admin::create([]);
+    }
+
+    /** @return Admin */
+    protected function createAdminUserCredential() {
+        $credential = $this->createCredential();
+
+        $admin = $credential->createAuthenticatableUser(Admin::class);
+
+        return $admin;
+    }
+
+    /** @return Credential */
+    protected function createCredential() {
+        return Credential::create([
+            'name' => 'Firman',
+            'email' => 'firmantr3@gmail.com',
+            'password' => Hash::make('secret'),
+        ]);
     }
 }

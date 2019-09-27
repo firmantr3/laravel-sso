@@ -13,6 +13,13 @@ class SSOServiceProvider extends ServiceProvider
 {
 
     /**
+     * @return string
+     */
+    public function tableMigrationPath() {
+        return __DIR__.'/../../../../database/migrations/create_laravel_sso_table.php.stub';
+    }
+
+    /**
      * Register Laravel SSO Service.
      *
      * @return void
@@ -20,7 +27,7 @@ class SSOServiceProvider extends ServiceProvider
     public function boot(Filesystem $filesystem)
     {
         $this->publishes([
-            __DIR__.'/../../../../database/migrations/create_laravel_sso_table.php.stub' => $this->getMigrationFileName($filesystem),
+            $this->tableMigrationPath() => $this->getMigrationFileName($filesystem),
         ], 'migrations');
 
         Auth::provider('sso', function ($app, array $config) {
