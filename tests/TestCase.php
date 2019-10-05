@@ -55,6 +55,10 @@ abstract class TestCase extends Orchestra
         $app['config']->set('auth.guards.admin', ['driver' => 'session', 'provider' => 'admins']);
         $app['config']->set('auth.providers.admins', ['driver' => 'sso', 'model' => Admin::class]);
 
+        // Set-up member guard
+        $app['config']->set('auth.guards.member', ['driver' => 'session', 'provider' => 'members']);
+        $app['config']->set('auth.providers.members', ['driver' => 'sso', 'model' => Member::class]);
+
         $app['config']->set('cache.prefix', 'firmantr3_tests---');
     }
 
@@ -68,12 +72,19 @@ abstract class TestCase extends Orchestra
         $app['db']->connection()->getSchemaBuilder()->create('admins', function (Blueprint $table) {
             $table->increments('id');
         });
+        $app['db']->connection()->getSchemaBuilder()->create('members', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('points');
+        });
 
         include_once __DIR__.'/../database/migrations/create_laravel_sso_table.php.stub';
 
         (new \CreateLaravelSSOTable())->up();
 
         Admin::create([]);
+        Member::create([
+            'points' => 0,
+        ]);
     }
 
     /** @return Admin */
