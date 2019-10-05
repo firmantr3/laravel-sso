@@ -1,7 +1,10 @@
-# Implement Single Sign On authenticatable credentials for your user models
+# Implement Single Sign On (SSO) authenticatable credentials for your user models
 
-Create just one unique credential for multiple authenticatable users
-that has different eloquent model.
+Create just one unique credential for multiple authenticatable users that has different eloquent model.
+
+## Introduction
+
+Given you need to implement a school management application, that have 3 different user: admins, teachers, students. Sometimes, admins can be teacher as well, how if the email and password don't need to be different? Well, **Laravel SSO** to the rescue!
 
 ## Installation
 
@@ -17,13 +20,23 @@ php artisan vendor:publish
 
 ## Configuration
 
-Update your laravel auth config: `/config/auth.php`, and use `sso` provider like so:
+Update your laravel auth config: `/config/auth.php`, and use `sso` provider, like so:
 
 ```php
     'providers' => [
-        'users' => [
+        'admins' => [
             'driver' => 'sso',
-            'model' => App\User::class,
+            'model' => App\Admin::class,
+        ],
+
+        'teachers' => [
+            'driver' => 'sso',
+            'model' => App\Teacher::class,
+        ],
+
+        'students' => [
+            'driver' => 'sso',
+            'model' => App\Student::class,
         ],
     ],
 ```
