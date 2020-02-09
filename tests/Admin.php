@@ -2,9 +2,7 @@
 
 namespace Firmantr3\LaravelSSO\Test;
 
-use Firmantr3\LaravelSSO\Models\User;
-
-class Admin extends User
+class Admin extends BaseUser
 {
 
     public $timestamps = false;

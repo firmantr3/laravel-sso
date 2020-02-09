@@ -4,11 +4,10 @@ namespace Firmantr3\LaravelSSO\Test;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Firmantr3\LaravelSSO\Test\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Firmantr3\LaravelSSO\Test\TestCase;
-use Firmantr3\LaravelSSO\Models\Credential;
+use Firmantr3\LaravelSSO\Test\Credential;
 use Illuminate\Auth\Middleware\Authenticate;
 
 class MiddlewareTest extends TestCase {

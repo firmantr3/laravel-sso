@@ -4,8 +4,8 @@ namespace Firmantr3\LaravelSSO\Test;
 
 use Firmantr3\LaravelSSO\Test\Admin;
 use Illuminate\Support\Facades\Hash;
+use Firmantr3\LaravelSSO\Test\Credential;
 use Illuminate\Database\Schema\Blueprint;
-use Firmantr3\LaravelSSO\Models\Credential;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Firmantr3\LaravelSSO\Providers\SSOServiceProvider;
 
@@ -70,11 +70,15 @@ abstract class TestCase extends Orchestra
     protected function setUpDatabase($app)
     {
         $app['db']->connection()->getSchemaBuilder()->create('admins', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('credential_id')->unique()->nullable();
+            $table->rememberToken();
         });
         $app['db']->connection()->getSchemaBuilder()->create('members', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('credential_id')->unique()->nullable();
             $table->unsignedInteger('points');
+            $table->rememberToken();
         });
 
         include_once __DIR__.'/../database/migrations/create_laravel_sso_table.php.stub';

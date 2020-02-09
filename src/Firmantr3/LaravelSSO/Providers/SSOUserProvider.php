@@ -30,20 +30,18 @@ class SSOUserProvider extends EloquentUserProvider
         // Eloquent User "model" that will be utilized by the Guard instances.
         $query = $this->newModelQuery();
 
-        $query->whereHas('authenticatable', function ($query) use ($credentials) {
-            $query->whereHas('credential', function ($query) use ($credentials) {
-                foreach ($credentials as $key => $value) {
-                    if (Str::contains($key, 'password')) {
-                        continue;
-                    }
-
-                    if (is_array($value) || $value instanceof Arrayable) {
-                        $query->whereIn($key, $value);
-                    } else {
-                        $query->where($key, $value);
-                    }
+        $query->whereHas('credential', function ($query) use ($credentials) {
+            foreach ($credentials as $key => $value) {
+                if (Str::contains($key, 'password')) {
+                    continue;
                 }
-            });
+
+                if (is_array($value) || $value instanceof Arrayable) {
+                    $query->whereIn($key, $value);
+                } else {
+                    $query->where($key, $value);
+                }
+            }
         });
 
         return $query->first();

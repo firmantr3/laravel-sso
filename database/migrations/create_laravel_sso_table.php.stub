@@ -14,7 +14,7 @@ class CreateLaravelSSOTable extends Migration
     public function up()
     {
         Schema::create('credentials', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->text('name');
             $table->string('email')->unique();
             $table->string('password')->nullable();
@@ -23,25 +23,6 @@ class CreateLaravelSSOTable extends Migration
             // Your custom fields here
 
             $table->timestamps();
-        });
-        
-        Schema::create('authenticatables', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('credential_id')->index();
-            $table->unsignedInteger('authenticatable_id')->nullable();
-            $table->string('authenticatable_type')->nullable();
-            $table->rememberToken();
-            $table->timestamps();
-
-            // prevent duplicate authenticatables
-            $table->unique(['credential_id', 'authenticatable_type']);
-            $table->index(['authenticatable_id', 'authenticatable_type']);
-
-            $table->foreign('credential_id')
-                ->references('id')
-                ->on('credentials')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
         });
     }
 
@@ -52,8 +33,6 @@ class CreateLaravelSSOTable extends Migration
      */
     public function down()
     {
-        Schema::drop('authenticatables');
-
         Schema::drop('credentials');
     }
 }

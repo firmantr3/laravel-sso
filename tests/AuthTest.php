@@ -2,7 +2,7 @@
 
 namespace Firmantr3\LaravelSSO\Test;
 
-use Firmantr3\LaravelSSO\Models\Credential;
+use Firmantr3\LaravelSSO\Test\Credential;
 
 class AuthTest extends TestCase {
 
@@ -30,7 +30,7 @@ class AuthTest extends TestCase {
         /**
          * Create member using that credential, then attempt login
          */
-        /** @var \Firmantr3\LaravelSSO\Models\Credential $credential */
+        /** @var Credential $credential */
         $credential = $admin->credential;
         $credential->createAuthenticatableUser(Member::class, [
             'points' => 99,

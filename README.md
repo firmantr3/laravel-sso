@@ -45,6 +45,8 @@ You can use preset Credential model: `Firmantr3\LaravelSSO\Models\Credential`.
 
 ## Sample Usage
 
+Your user models must have `credential_id` AND Laravel's default user attributes like `remember_token`, check your user model migration. The `credential_id` should be unique for each models, to prevent duplication.
+
 User model's class must extend `Firmantr3\LaravelSSO\Models\User` like so:
 
 ```php

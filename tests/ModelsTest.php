@@ -2,12 +2,10 @@
 
 namespace Firmantr3\LaravelSSO\Test;
 
-use Firmantr3\LaravelSSO\Exceptions\CredentialModelException;
-use Firmantr3\LaravelSSO\Models\Authenticatable;
-use Firmantr3\LaravelSSO\Models\Credential;
+use Firmantr3\LaravelSSO\Test\Credential;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Optional;
+use Firmantr3\LaravelSSO\Exceptions\CredentialModelException;
 
 class ModelsTest extends TestCase
 {
@@ -16,22 +14,18 @@ class ModelsTest extends TestCase
     public function it_should_able_to_create_admin_credential() {
         $admin = $this->createAdminUserCredential();
 
-        $authenticatable = $admin->authenticatable;
-
-        $credential = $authenticatable->credential;
+        $credential = $admin->credential;
 
         $this->assertTrue($admin instanceof Admin);
-        $this->assertTrue($credential->authenticatables->first()->user instanceof Admin);
-        $this->assertTrue($authenticatable instanceof Authenticatable);
         $this->assertTrue($credential instanceof Credential);
-        $this->assertTrue($authenticatable->credential instanceof Credential);
+        $this->assertTrue($credential->admins->first() instanceof Admin);
         
-        $this->assertTrue($credential->authenticatables instanceof Collection);
-        $this->assertTrue($credential->authenticatables() instanceof HasMany);
-
+        $this->assertTrue($credential->admins instanceof Collection);
+        $this->assertTrue($credential->admins() instanceof HasMany);
+        
         $this->assertTrue(is_integer($credential->id));
         $this->assertTrue(is_integer($admin->id));
-        $this->assertTrue(is_integer($admin->authenticatable->id));
+        $this->assertTrue(is_integer($admin->credential->id));
     }
 
     /** @test */
@@ -40,14 +34,14 @@ class ModelsTest extends TestCase
 
         $admin = $this->createAdminUserCredential();
 
-        $admin = $admin->authenticatable->credential->createAuthenticatableUser(Admin::class);
+        $admin = $admin->credential->createAuthenticatableUser(Admin::class);
     }
 
     /** @test */
     public function credential_can_filter_by_associated_user_model() {
         $this->createAdminUserCredential();
 
-        $credential = Credential::userModel(Admin::class)->first();
+        $credential = Credential::has('admins')->first();
 
         $this->assertTrue($credential instanceof Credential);
     }
@@ -58,14 +52,14 @@ class ModelsTest extends TestCase
 
         $credential->attachUser($this->testAdmin);
 
-        $this->assertEquals($credential->authenticatables->first()->user, $this->testAdmin);
+        $this->assertEquals($credential->admins()->first()->toArray(), $this->testAdmin->toArray());
     }
 
     /** @test */
     public function credential_password_should_be_hidden_when_serialized() {
         $admin = $this->createAdminUserCredential();
 
-        $credential = $admin->authenticatable->credential;
+        $credential = $admin->credential;
 
         $this->assertArrayNotHasKey('password', $credential->toArray());
         $this->assertArrayNotHasKey('password', $admin->toArray());
@@ -82,7 +76,7 @@ class ModelsTest extends TestCase
             'password',
         ]);
 
-        $this->assertTrue($credential instanceof Optional);
+        $this->assertTrue($credential instanceof Credential);
         $this->assertEquals($credential->name, $admin->name);
         $this->assertEquals($credential->email, $admin->email);
         $this->assertEquals($credential->password, $admin->password);

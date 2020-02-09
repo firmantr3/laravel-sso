@@ -33,26 +33,6 @@ class Credential extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function authenticatables()
-    {
-        return $this->hasMany(Authenticatable::class);
-    }
-
-    /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeUserModel($query, string $model)
-    {
-        return $query->whereHas('authenticatables', function ($query) use ($model) {
-            $query->where('authenticatable_type', $model);
-        });
-    }
-
-    /**
      * Create authenticatable user from this credential
      *
      * @param array $attributes
@@ -78,11 +58,11 @@ class Credential extends Model
         if ($user instanceof User) {
             DB::beginTransaction();
             try {
-                $user->save();
-                $this->authenticatables()->create([
-                    'authenticatable_id' => $user->id,
-                    'authenticatable_type' => $userClass,
-                ]);
+                $user->{$user->credentialKeyName()} = $this->id;
+
+                if($user->isDirty()) {
+                    $user->save();
+                }
 
                 DB::commit();
             } catch (Exception $e) {
