@@ -31,6 +31,28 @@ trait UserTrait {
         /** @var \Illuminate\Database\Eloquent\Model $this */
         return $this->belongsTo($this->credentialClass(), $this->credentialKeyName(), 'id');
     }
+    
+    /**
+     * Determine if the user has verified their email address.
+     *
+     * @return bool
+     */
+    public function hasVerifiedEmail()
+    {
+        return ! is_null($this->credential->email_verified_at);
+    }
+
+    /**
+     * Mark the given user's email as verified.
+     *
+     * @return bool
+     */
+    public function markEmailAsVerified()
+    {
+        return $this->credential->forceFill([
+            'email_verified_at' => $this->freshTimestamp(),
+        ])->save();
+    }
 
     /**
      * @return string
