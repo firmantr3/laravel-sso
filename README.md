@@ -82,6 +82,8 @@ $adminAttributes = [];
 $admin = $credential->createAuthenticatableUser($adminClass, $adminAttributes);
 ```
 
+You can also create your own `Credential` model class that extends from `Firmantr3\LaravelSSO\Models\Credential` so you can customize the child relations.
+
 ## Test
 
 ```bash
