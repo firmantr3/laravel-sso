@@ -23,7 +23,7 @@ trait UserTrait {
 
     /** @return string */
     public function credentialClass() {
-        return Credential::class;
+        return config('sso.credential');
     }
 
     /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo */

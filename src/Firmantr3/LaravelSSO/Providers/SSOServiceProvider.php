@@ -12,6 +12,10 @@ use Firmantr3\LaravelSSO\Providers\SSOUserProvider;
 class SSOServiceProvider extends ServiceProvider
 {
 
+    protected function ssoConfigPath() {
+        return __DIR__ . '/../../../../config/sso.php';
+    }
+
     /**
      * @return string
      */
@@ -29,6 +33,10 @@ class SSOServiceProvider extends ServiceProvider
         $this->publishes([
             $this->tableMigrationPath() => $this->getMigrationFileName($filesystem),
         ], 'migrations');
+
+        $this->publishes([
+            $this->ssoConfigPath() => config_path('sso.php'),
+        ], 'config');
 
         Auth::provider('sso', function ($app, array $config) {
             // Return an instance of Illuminate\Contracts\Auth\UserProvider...
@@ -54,5 +62,9 @@ class SSOServiceProvider extends ServiceProvider
                 return $filesystem->glob($path.'*_create_laravel_sso_table.php');
             })->push($this->app->databasePath()."/migrations/{$timestamp}_create_laravel_sso_table.php")
             ->first();
+    }
+
+    public function register() {
+        $this->mergeConfigFrom($this->ssoConfigPath(), 'sso');
     }
 }

@@ -51,6 +51,8 @@ abstract class TestCase extends Orchestra
             'prefix'   => '',
         ]);
 
+        $app['config']->set('sso.credential', \Firmantr3\LaravelSSO\Test\Credential::class);
+
         // Set-up admin guard
         $app['config']->set('auth.guards.admin', ['driver' => 'session', 'provider' => 'admins']);
         $app['config']->set('auth.providers.admins', ['driver' => 'sso', 'model' => Admin::class]);

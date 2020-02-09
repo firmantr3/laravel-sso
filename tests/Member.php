@@ -2,7 +2,9 @@
 
 namespace Firmantr3\LaravelSSO\Test;
 
-class Member extends BaseUser
+use Firmantr3\LaravelSSO\Models\User;
+
+class Member extends User
 {
     public $timestamps = false;
 

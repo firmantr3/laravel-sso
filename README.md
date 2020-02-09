@@ -41,7 +41,7 @@ Update your laravel auth config: `/config/auth.php`, and use `sso` provider, lik
     ],
 ```
 
-You can use preset Credential model: `Firmantr3\LaravelSSO\Models\Credential`.
+You can use preset Credential model: `Firmantr3\LaravelSSO\Models\Credential`. You can also create your own `Credential` model class that extends from `Firmantr3\LaravelSSO\Models\Credential` so you can customize the child relations, and then update your class namespace in `config/sso.php`.
 
 ## Sample Usage
 
@@ -81,8 +81,6 @@ $adminAttributes = [];
 
 $admin = $credential->createAuthenticatableUser($adminClass, $adminAttributes);
 ```
-
-You can also create your own `Credential` model class that extends from `Firmantr3\LaravelSSO\Models\Credential` so you can customize the child relations.
 
 ## Test
 
