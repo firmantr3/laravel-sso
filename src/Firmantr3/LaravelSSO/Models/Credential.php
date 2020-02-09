@@ -20,13 +20,13 @@ use Firmantr3\LaravelSSO\Exceptions\CredentialModelException;
 class Credential extends Model
 {
 
-    public $table = 'credentials';
+    protected $table = 'credentials';
 
     protected $hidden = [
         'password',
     ];
 
-    public $fillable = [
+    protected $fillable = [
         'name',
         'email',
         'password',
